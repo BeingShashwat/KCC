@@ -395,12 +395,12 @@ export default function RegisterPage() {
 
                 {/* UTR Input */}
                 <div className="glass-card animated-border p-8 sm:p-10 mb-6">
-                  <div className="p-5 mb-6 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/15 flex items-start gap-3">
-                    <AlertTriangle size={18} className="text-amber-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                      पेमेंट करने के बाद <strong style={{ color: 'var(--color-text-primary)' }}>UTR/Transaction Reference Number</strong> (12 अंक) नीचे दर्ज करें।
-                      वेरिफिकेशन के बाद WhatsApp पर कन्फर्मेशन मिलेगा।
-                    </p>
+                  <div className="p-5 mb-6 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-300 dark:border-red-500/20 flex items-start gap-3">
+                    <AlertTriangle size={18} className="text-red-500 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                      <p className="font-bold text-red-600 dark:text-red-400 mb-1">⚠️ ज़रूरी सूचना / Important</p>
+                      <p>बिना UTR नंबर के रजिस्ट्रेशन पूरा नहीं होगा। पेमेंट करने के बाद <strong style={{ color: 'var(--color-text-primary)' }}>UTR/Transaction Reference Number</strong> (12 अंक) नीचे दर्ज करें। UTR सबमिट करने के बाद ही आपकी टीम Admin को वेरिफिकेशन के लिए भेजी जाएगी।</p>
+                    </div>
                   </div>
 
                   <div className="mb-6">
