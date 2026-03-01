@@ -162,7 +162,7 @@ export default function HomePage() {
               <span className="gradient-text">🎬 Season 1 Highlights</span>
             </h2>
             <p className="section-subtitle text-center mx-auto mb-16">
-              ढेंगहा नाइट क्रिकेट टूर्नामेंट 2025 की झलकियाँ
+              ठेंगहा नाइट क्रिकेट टूर्नामेंट 2025 की झलकियाँ
             </p>
           </motion.div>
 

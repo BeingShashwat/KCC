@@ -23,7 +23,7 @@ export default function GalleryPage() {
             <span className="gradient-text">📸 Season 1 Gallery</span>
           </h1>
           <p className="section-subtitle mx-auto">
-            सीज़न 1 की यादगार तस्वीरें • ढेंगहा नाइट क्रिकेट टूर्नामेंट 2025
+            सीज़न 1 की यादगार तस्वीरें • ठेंगहा नाइट क्रिकेट टूर्नामेंट 2025
           </p>
         </motion.div>
 
