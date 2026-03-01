@@ -26,7 +26,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/60 via-transparent to-transparent dark:from-emerald-950/20 dark:via-transparent" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-emerald-500/[0.03] dark:bg-emerald-500/5 rounded-full blur-[120px]" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center mt-20 sm:mt-10">
+        <div className="relative z-10 max-w-4xl mx-auto text-center mt-28 sm:mt-16">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
