@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { PRIZES, SPECIAL_AWARDS, RULES, TOURNAMENT_INFO } from '@/lib/constants';
 
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
-const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { type: 'spring', damping: 15 } } };
+const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, damping: 15 } } };
 
 export default function PrizesPage() {
   return (
