@@ -438,7 +438,7 @@ export default function RegisterPage() {
                     टीम <span className="text-emerald-600 dark:text-emerald-400 font-bold">{formData.teamName}</span> की डिटेल्स सबमिट हो गई हैं!
                   </p>
                   <p className="text-base mb-10 max-w-md mx-auto" style={{ color: 'var(--color-text-muted)' }}>
-                    हम आपका UTR वेरिफाई कर रहे हैं। वेरिफिकेशन के बाद WhatsApp पर कन्फर्मेशन मिलेगा। 📱
+                    हम आपका UTR वेरिफाई कर रहे हैं। वेरिफिकेशन की स्थिति जानने के लिए वेबसाइट पर <strong className="text-emerald-600 dark:text-emerald-400">Teams</strong> सेक्शन चेक करें। ✅
                   </p>
 
                   <div className="p-6 rounded-xl text-left mb-10 mx-auto max-w-sm" style={{ background: 'var(--color-bg-input)', border: '1px solid var(--color-border)' }}>
