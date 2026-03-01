@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Trophy, Users, ChevronDown, Phone, Shield, UserCheck } from 'lucide-react';
 import Countdown from '@/components/Countdown';
-import { TOURNAMENT_INFO, CONTACTS, PRIZES, GALLERY_IMAGES, HIGHLIGHT_VIDEO } from '@/lib/constants';
+import { TOURNAMENT_INFO, CONTACTS, PRIZES, GALLERY_IMAGES, HIGHLIGHT_VIDEO_YT } from '@/lib/constants';
 import { getVerifiedTeams, getVerifiedTeamCount } from '@/lib/supabase';
 
 const fadeUp = { hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0 } };
@@ -168,9 +168,14 @@ export default function HomePage() {
 
           <motion.div initial={{ opacity: 0, scale: 0.96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="max-w-4xl mx-auto">
             <div className="rounded-2xl overflow-hidden shadow-2xl border" style={{ borderColor: 'var(--color-border)' }}>
-              <video controls preload="metadata" poster={GALLERY_IMAGES[0]} className="w-full aspect-video bg-black outline-none">
-                <source src={HIGHLIGHT_VIDEO} type="video/mp4" />
-              </video>
+              <iframe
+                src={HIGHLIGHT_VIDEO_YT}
+                title="Season 1 Highlights"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full aspect-video bg-black"
+                style={{ border: 'none' }}
+              />
             </div>
           </motion.div>
         </div>

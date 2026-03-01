@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { GALLERY_IMAGES, HIGHLIGHT_VIDEO } from '@/lib/constants';
+import { GALLERY_IMAGES, HIGHLIGHT_VIDEO_YT } from '@/lib/constants';
 
 export default function GalleryPage() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -33,9 +33,14 @@ export default function GalleryPage() {
             🎬 Highlight Video
           </h2>
           <div className="rounded-2xl overflow-hidden shadow-2xl border" style={{ borderColor: 'var(--color-border)' }}>
-            <video controls preload="metadata" poster={GALLERY_IMAGES[0]} className="w-full aspect-video bg-black outline-none">
-              <source src={HIGHLIGHT_VIDEO} type="video/mp4" />
-            </video>
+            <iframe
+              src={HIGHLIGHT_VIDEO_YT}
+              title="Highlight Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full aspect-video bg-black"
+              style={{ border: 'none' }}
+            />
           </div>
         </motion.div>
 

@@ -97,7 +97,7 @@ export const GALLERY_IMAGES = Array.from({ length: 39 }, (_, i) => {
     return `/gallery/IMG-20260221-WA${num}.jpg`;
 });
 
-export const HIGHLIGHT_VIDEO = '/gallery/highlight-video.mp4';
+export const HIGHLIGHT_VIDEO_YT = 'https://www.youtube.com/embed/zFAg-Yxg8ek';
 
 export const UTR_GUIDES = [
     {
