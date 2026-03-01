@@ -16,20 +16,45 @@ interface FormData {
 const emptyPlayer = (): PlayerInfo => ({ name: '', aadhaar: '' });
 type Step = 'form' | 'payment' | 'success';
 
+const STORAGE_KEY = 'kcc_register_draft';
+
+function loadDraft() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw) as { formData: FormData; step: Step; registrationId: string | null; utrInput: string };
+  } catch { return null; }
+}
+
+function saveDraft(data: { formData: FormData; step: Step; registrationId: string | null; utrInput: string }) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+}
+
+function clearDraft() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch {}
+}
+
 export default function RegisterPage() {
-  const [step, setStep] = useState<Step>('form');
-  const [formData, setFormData] = useState<FormData>({
+  const draft = loadDraft();
+  const [step, setStep] = useState<Step>(draft?.step === 'success' ? 'form' : draft?.step || 'form');
+  const [formData, setFormData] = useState<FormData>(draft?.formData || {
     teamName: '', captainName: '', captainPhone: '', captainAadhaar: '',
     players: Array.from({ length: TOURNAMENT_INFO.rosterPlayers }, emptyPlayer),
   });
   const [loading, setLoading] = useState(false);
-  const [registrationId, setRegistrationId] = useState<string | null>(null);
-  const [utrInput, setUtrInput] = useState('');
+  const [registrationId, setRegistrationId] = useState<string | null>(draft?.registrationId || null);
+  const [utrInput, setUtrInput] = useState(draft?.utrInput || '');
   const [registrationsClosed, setRegistrationsClosed] = useState(false);
   const [teamCount, setTeamCount] = useState(0);
 
   const UPI_ID = 'mishrapulak.6107@okhdfcbank';
   const QR_IMAGE = '/qr-payment.png'; // Place your QR code image in public folder
+
+  // Save draft whenever form state changes
+  useEffect(() => {
+    if (step === 'success') { clearDraft(); return; }
+    saveDraft({ formData, step, registrationId, utrInput });
+  }, [formData, step, registrationId, utrInput]);
 
   useEffect(() => {
     getActiveTeamCount().then((count) => {
@@ -94,7 +119,7 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await updateUTR(registrationId, utrInput.trim());
-      setStep('success'); toast.success('🎉 रजिस्ट्रेशन सबमिट!');
+      clearDraft(); setStep('success'); toast.success('🎉 रजिस्ट्रेशन सबमिट!');
     } catch (err) { toast.error('कुछ गड़बड़ हो गई।'); } finally { setLoading(false); }
   };
 
