@@ -220,7 +220,7 @@ export default function HomePage() {
           </motion.div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 mb-12">
-            {GALLERY_IMAGES.slice(0, 8).map((src, i) => (
+            {GALLERY_IMAGES.slice(0, 4).map((src, i) => (
               <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.04 }}
                 className="relative overflow-hidden rounded-2xl aspect-[4/3] bg-black/5 dark:bg-white/5 group">
                 <img src={src} alt={`Season 1 - ${i + 1}`} loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />

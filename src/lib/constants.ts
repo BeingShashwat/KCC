@@ -94,7 +94,7 @@ export const RULES = [
 
 export const GALLERY_IMAGES = Array.from({ length: 39 }, (_, i) => {
     const num = String(i + 2).padStart(4, '0');
-    return `/gallery/IMG-20260221-WA${num}.jpg`;
+    return `/gallery/IMG-20260221-WA${num}.webp`;
 });
 
 export const HIGHLIGHT_VIDEO_YT = 'https://www.youtube.com/embed/zFAg-Yxg8ek';
