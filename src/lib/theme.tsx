@@ -11,9 +11,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('kcc-theme');
-      return saved === 'dark';
+      if (saved) return saved === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
-    return false; // default: light
+    return false;
   });
 
   useEffect(() => {
