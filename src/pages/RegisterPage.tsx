@@ -109,6 +109,7 @@ export default function RegisterPage() {
         payment_status: 'pending', amount: TOURNAMENT_INFO.entryFee,
       });
       setRegistrationId(result.id!); setStep('payment');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       toast.success('✅ टीम सबमिट हो गई! अब पेमेंट करें।');
     } catch (err) { toast.error('कुछ गड़बड़ हो गई।'); } finally { setLoading(false); }
   };
@@ -119,7 +120,9 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       await updateUTR(registrationId, utrInput.trim());
-      clearDraft(); setStep('success'); toast.success('🎉 रजिस्ट्रेशन सबमिट!');
+      clearDraft(); setStep('success');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      toast.success('🎉 रजिस्ट्रेशन सबमिट!');
     } catch (err) { toast.error('कुछ गड़बड़ हो गई।'); } finally { setLoading(false); }
   };
 
