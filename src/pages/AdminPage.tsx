@@ -231,9 +231,13 @@ export default function AdminPage() {
                       <span className="flex items-center gap-2 font-medium"><User size={14} /> {reg.captain_name}</span>
                       <span className="flex items-center gap-2 font-medium"><Phone size={14} /> {reg.captain_phone}</span>
                       <span className="flex items-center gap-2 font-medium"><Users size={14} /> {players.length} Players</span>
-                      {reg.utr_number && (
+                      {reg.utr_number ? (
                         <span className="flex items-center gap-2 font-mono text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-3 py-1 rounded-md font-bold">
                           <CreditCard size={14} /> UTR: {reg.utr_number}
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 px-3 py-1.5 rounded-md font-bold text-xs border border-red-200 dark:border-red-500/20">
+                          ⚠️ No UTR Submitted
                         </span>
                       )}
                     </div>

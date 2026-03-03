@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Phone, Users, Loader2, CheckCircle, CreditCard, Copy, AlertTriangle, Shield, MapPin, Store, IdCard } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -46,6 +46,9 @@ export default function RegisterPage() {
   const [utrInput, setUtrInput] = useState(draft?.utrInput || '');
   const [registrationsClosed, setRegistrationsClosed] = useState(false);
   const [teamCount, setTeamCount] = useState(0);
+  const [payClicked, setPayClicked] = useState(false);
+  const [utrTouched, setUtrTouched] = useState(false);
+  const utrSectionRef = useRef<HTMLDivElement>(null);
 
   const UPI_ID = 'mishrapulak.6107@okhdfcbank';
   const QR_IMAGE = '/qr-payment.png'; // Place your QR code image in public folder
@@ -115,15 +118,32 @@ export default function RegisterPage() {
   };
 
   const handleUTRSubmit = async () => {
-    if (!utrInput.trim()) { toast.error('UTR नंबर डालें'); return; }
+    setUtrTouched(true);
+    const trimmed = utrInput.trim();
+    if (!trimmed) { toast.error('⚠️ UTR नंबर डालें — बिना UTR रजिस्ट्रेशन पूरा नहीं होगा!'); scrollToUTR(); return; }
+    if (trimmed.length < 12) { toast.error('⚠️ UTR नंबर कम से कम 12 अंक का होना चाहिए'); scrollToUTR(); return; }
     if (!registrationId) return;
     setLoading(true);
     try {
-      await updateUTR(registrationId, utrInput.trim());
+      await updateUTR(registrationId, trimmed);
       clearDraft(); setStep('success');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       toast.success('🎉 रजिस्ट्रेशन सबमिट!');
     } catch (err) { toast.error('कुछ गड़बड़ हो गई।'); } finally { setLoading(false); }
+  };
+
+  const scrollToUTR = () => {
+    setTimeout(() => {
+      utrSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  };
+
+  const handlePayClick = () => {
+    setPayClicked(true);
+    // After a small delay (to allow the UPI app to open), scroll to UTR section
+    setTimeout(() => {
+      utrSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 1500);
   };
 
   const copyUPI = () => { navigator.clipboard.writeText(UPI_ID); toast.success('UPI ID कॉपी हो गई!'); };
@@ -277,6 +297,17 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
+                {/* UTR Warning on Form Page */}
+                <div className="p-5 rounded-xl bg-red-100 dark:bg-red-500/15 border-2 border-red-400 dark:border-red-500/30 text-center mt-6 mb-4">
+                  <p className="text-sm sm:text-base font-black text-red-700 dark:text-red-400 leading-relaxed">
+                    🚨 बिना UTR नंबर के आपका रजिस्ट्रेशन नहीं गिना जाएगा!<br />
+                    <span className="text-red-600 dark:text-red-300">Without UTR number your registration will NOT be counted.</span>
+                  </p>
+                  <p className="text-xs font-bold mt-2 text-red-500 dark:text-red-400/80">
+                    पेमेंट के बाद UTR नंबर डालना अनिवार्य है — Please keep your UTR ready after payment
+                  </p>
+                </div>
+
                 <button onClick={handleSubmit} disabled={loading} className="btn-gold w-full text-lg py-4 mt-2 shadow-lg shadow-amber-500/20">
                   {loading ? <Loader2 size={24} className="animate-spin" /> : <CreditCard size={24} />}
                   {loading ? 'Processing...' : `Pay ${TOURNAMENT_INFO.entryFeeDisplay} & Register`}
@@ -314,13 +345,23 @@ export default function RegisterPage() {
                     <a
                       href={`upi://pay?pa=${UPI_ID}&pn=KCC%20Tournament&am=${TOURNAMENT_INFO.entryFee}&cu=INR&tn=KCC%20Season%202%20-%20${encodeURIComponent(formData.teamName)}`}
                       className="btn-gold w-full text-lg py-5 flex items-center justify-center gap-3 shadow-lg shadow-amber-500/20 no-underline"
+                      onClick={handlePayClick}
                     >
                       <CreditCard size={24} />
                       📱 Pay using App
                     </a>
-                    <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
+                    <p className="text-xs text-center mb-3" style={{ color: 'var(--color-text-muted)' }}>
                       यह बटन आपके फोन पर UPI ऐप (GPay, PhonePe, Paytm) खोलेगा
                     </p>
+                    <div className="p-4 rounded-xl bg-red-100 dark:bg-red-500/15 border-2 border-red-400 dark:border-red-500/30 text-center">
+                      <p className="text-sm sm:text-base font-black text-red-700 dark:text-red-400 leading-relaxed">
+                        🚨 बिना UTR नंबर के आपका रजिस्ट्रेशन नहीं गिना जाएगा!<br />
+                        <span className="text-red-600 dark:text-red-300">Without UTR number your registration will NOT be counted.</span>
+                      </p>
+                      <p className="text-xs font-bold mt-2 text-red-500 dark:text-red-400/80">
+                        पेमेंट के बाद नीचे UTR नंबर ज़रूर डालें ↓
+                      </p>
+                    </div>
 
                     <div className="flex items-center gap-4">
                       <div className="flex-1 h-px" style={{ background: 'var(--color-border)' }} />
@@ -393,23 +434,48 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
-                {/* UTR Input */}
-                <div className="glass-card animated-border p-8 sm:p-10 mb-6">
-                  <div className="p-5 mb-6 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-300 dark:border-red-500/20 flex items-start gap-3">
-                    <AlertTriangle size={18} className="text-red-500 mt-0.5 flex-shrink-0" />
+                {/* UTR Input — MANDATORY */}
+                <div ref={utrSectionRef} className={`glass-card animated-border p-8 sm:p-10 mb-6 transition-all duration-500 ${payClicked && !utrInput.trim() ? 'ring-2 ring-red-500 ring-offset-2 dark:ring-offset-gray-900' : ''}`}
+                  style={payClicked && !utrInput.trim() ? { animation: 'pulse-border 2s infinite' } : {}}
+                >
+                  <div className="p-5 mb-6 rounded-xl bg-red-50 dark:bg-red-500/10 border-2 border-red-400 dark:border-red-500/30 flex items-start gap-3">
+                    <AlertTriangle size={22} className="text-red-500 mt-0.5 flex-shrink-0 animate-bounce" />
                     <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                      <p className="font-bold text-red-600 dark:text-red-400 mb-1">⚠️ ज़रूरी सूचना / Important</p>
-                      <p>बिना UTR नंबर के रजिस्ट्रेशन पूरा नहीं होगा। पेमेंट करने के बाद <strong style={{ color: 'var(--color-text-primary)' }}>UTR/Transaction Reference Number</strong> (12 अंक) नीचे दर्ज करें। UTR सबमिट करने के बाद ही आपकी टीम Admin को वेरिफिकेशन के लिए भेजी जाएगी।</p>
+                      <p className="font-black text-red-600 dark:text-red-400 mb-1 text-base">🚨 ज़रूरी / MANDATORY — UTR नंबर डालना अनिवार्य है!</p>
+                      <p>बिना UTR नंबर के रजिस्ट्रेशन <strong className="text-red-600 dark:text-red-400">पूरा नहीं होगा</strong>। पेमेंट करने के बाद <strong style={{ color: 'var(--color-text-primary)' }}>UTR/Transaction Reference Number</strong> (12 अंक) नीचे दर्ज करें। UTR सबमिट करने के बाद ही आपकी टीम Admin को वेरिफिकेशन के लिए भेजी जाएगी।</p>
                     </div>
                   </div>
 
+                  {payClicked && !utrInput.trim() && (
+                    <div className="p-4 mb-6 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/20 flex items-center gap-3">
+                      <span className="text-2xl">👇</span>
+                      <p className="text-sm font-bold text-amber-700 dark:text-amber-400">
+                        पेमेंट हो गया? अब नीचे UTR नंबर डालें और "Submit" दबाएं।
+                      </p>
+                    </div>
+                  )}
+
                   <div className="mb-6">
-                    <label className="form-label">UTR / Transaction Reference Number</label>
-                    <input type="text" className="input-field font-mono text-lg tracking-widest" placeholder="e.g. 425698741258"
-                      value={utrInput} onChange={(e) => setUtrInput(e.target.value)} />
+                    <label className="form-label flex items-center gap-2">
+                      UTR / Transaction Reference Number <span className="text-red-500 font-black text-lg">*</span>
+                    </label>
+                    <input type="text" inputMode="numeric"
+                      className={`input-field font-mono text-lg tracking-widest transition-colors ${utrTouched && !utrInput.trim() ? 'border-red-500 dark:border-red-500 ring-2 ring-red-500/20' : ''}`}
+                      placeholder="e.g. 425698741258 (minimum 12 digits)"
+                      value={utrInput} onChange={(e) => { setUtrInput(e.target.value); setUtrTouched(true); }} />
+                    {utrTouched && !utrInput.trim() && (
+                      <p className="text-red-500 text-sm font-bold mt-2 flex items-center gap-1">
+                        <AlertTriangle size={14} /> UTR नंबर डालना ज़रूरी है!
+                      </p>
+                    )}
+                    {utrInput.trim() && utrInput.trim().length < 12 && (
+                      <p className="text-amber-500 text-sm font-bold mt-2 flex items-center gap-1">
+                        <AlertTriangle size={14} /> UTR नंबर कम से कम 12 अंक का होना चाहिए
+                      </p>
+                    )}
                   </div>
 
-                  <button onClick={handleUTRSubmit} disabled={loading} className="btn-primary w-full text-lg py-4">
+                  <button onClick={handleUTRSubmit} disabled={loading || !utrInput.trim() || utrInput.trim().length < 12} className={`btn-primary w-full text-lg py-4 transition-opacity ${!utrInput.trim() || utrInput.trim().length < 12 ? 'opacity-50 cursor-not-allowed' : ''}`}>
                     {loading ? <Loader2 size={20} className="animate-spin" /> : <CheckCircle size={20} />}
                     {loading ? 'Submitting...' : 'Submit UTR & Complete Registration'}
                   </button>
